@@ -1,0 +1,5 @@
+package com.diwakarallu.ecommerce.model;
+
+public class Product {
+    
+}
