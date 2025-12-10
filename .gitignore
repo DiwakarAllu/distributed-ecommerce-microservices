@@ -1,16 +1,16 @@
-# IDEs
+# Build outputs
+target/
+build/
+
+# IDE files
 .vscode/
 .idea/
 .metadata/
+*.iml
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
 
-# Temporary files
-*.log
-*.tmp
-
-# Build outputs from all modules
-target/
-build/
+# Local database / temp files
+product-service/data/mongodb/
