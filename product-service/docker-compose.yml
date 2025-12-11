@@ -1,8 +1,7 @@
-version: '4'
 services:
-  mongodb:
+  product-mongodb:
     image: mongo:7.0.5
-    container_name: mongodb
+    container_name: product-mongodb
     ports:
       - "27017:27017"
     environment:
@@ -11,3 +10,4 @@ services:
       MONGO_INITDB_DATABASE: product-service
     volumes:
       - ./data/mongodb:/data/db
+    restart: unless-stopped
