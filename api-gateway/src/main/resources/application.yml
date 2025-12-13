@@ -9,17 +9,15 @@ spring:
   main:
     web-application-type: reactive
 
-  # =========================
+
   # REDIS (Rate Limiting)
-  # =========================
+
   # data:
   #   redis:
   #     host: localhost
   #     port: 6379
 
-  # =========================
-  # SECURITY (Keycloak JWT)
-  # =========================
+  # Security (Keycloak JWT)
   security:
     oauth2:
       resourceserver:
@@ -28,9 +26,7 @@ spring:
 
   cloud:
     gateway:
-      # =========================
       # GLOBAL CORS
-      # =========================
       globalcors:
         add-to-simple-url-handler-mapping: true
         corsConfigurations:
@@ -48,13 +44,11 @@ spring:
               - "*"
 #            allowCredentials: true
 
-      # =========================
       # ROUTES
-      # =========================
+
       routes:
-        # -------------------------
-        # PRODUCT SERVICE
-        # -------------------------
+
+     
         - id: product-service
           uri: http://localhost:8080
           predicates:
@@ -84,9 +78,7 @@ spring:
           filters:
             - SetPath=/api-docs
             - AddResponseHeader=Content-Type, application/json
-        # -------------------------
-        # ORDER SERVICE
-        # -------------------------
+    
         - id: order-service
           uri: http://localhost:8081
           predicates:
@@ -105,9 +97,7 @@ spring:
             - SetPath=/api-docs
             - AddResponseHeader=Content-Type, application/json
 
-        # -------------------------
-        # INVENTORY SERVICE
-        # -------------------------
+       
         - id: inventory-service
           uri: http://localhost:8082
           predicates:
@@ -127,9 +117,9 @@ spring:
             - SetPath=/api-docs
             - AddResponseHeader=Content-Type, application/json
 
-# =========================
+
 # RESILIENCE4J
-# =========================
+
 resilience4j:
   circuitbreaker:
     configs:
@@ -153,17 +143,9 @@ resilience4j:
         maxAttempts: 3
         waitDuration: 2s
 
-    # instances:
-    #   productServiceCircuit:
-    #     baseConfig: default
-    #   orderServiceCircuit:
-    #     baseConfig: default
-    #   inventoryServiceCircuit:
-    #     baseConfig: default
 
-# =========================
 # SWAGGER (GATEWAY)
-# =========================
+
 springdoc:
   api-docs:
     enabled: true
@@ -179,9 +161,7 @@ springdoc:
       - name: Inventory Service
         url: /aggregate/inventory-service/api-docs
 
-# =========================
 # LOGGING
-# =========================
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
@@ -198,217 +178,3 @@ management:
   endpoint:
     health:
       show-details: always # show full health details
-
-# server:
-#   port: 9000
-
-# spring:
-#   application:
-#     name: api-gateway
-
-#   cloud:
-#     # Switch from 'mvc' back to the standard 'gateway' properties
-#     gateway:
-#       routes:
-
-#         # ===========================================================
-#         # PRODUCT SERVICE
-#         # ===========================================================
-#         - id: product-service
-#           uri: http://localhost:8080
-#           predicates:
-#             - Path=/api/products/**
-#           filters:
-#             # WebFlux syntax: comma-separated string
-#             - CircuitBreaker=name=productServiceCircuitBreaker,fallbackUri=forward:/fallbackRoute
-#             - Retry=retries=3,methods=GET
-
-#         - id: product-service-swagger
-#           uri: http://localhost:8080
-#           predicates:
-#             - Path=/aggregate/product-service/api-docs
-#           filters:
-#             - CircuitBreaker=name=productServiceSwaggerCircuitBreaker,fallbackUri=forward:/fallbackRoute
-#             - SetPath=/api-docs
-#             - AddResponseHeader=Content-Type, application/json
-
-#         # ===========================================================
-#         # ORDER SERVICE
-#         # ===========================================================
-#         - id: order-service
-#           uri: http://localhost:8081
-#           predicates:
-#             - Path=/api/orders/**
-#           filters:
-#             - CircuitBreaker=name=orderServiceCircuitBreaker,fallbackUri=forward:/fallbackRoute
-#             - Retry=retries=3,methods=GET,POST
-
-#         - id: order-service-swagger
-#           uri: http://localhost:8081
-#           predicates:
-#             - Path=/aggregate/order-service/api-docs
-#           filters:
-#             - CircuitBreaker=name=orderServiceSwaggerCircuitBreaker,fallbackUri=forward:/fallbackRoute
-#             - SetPath=/api-docs
-#             - AddResponseHeader=Content-Type, application/json
-
-#         # ===========================================================
-#         # INVENTORY SERVICE
-#         # ===========================================================
-#         - id: inventory-service
-#           uri: http://localhost:8082
-#           predicates:
-#             - Path=/api/inventory/**
-#           filters:
-#             - CircuitBreaker=name=inventoryServiceCircuitBreaker,fallbackUri=forward:/fallbackRoute
-#             - Retry=retries=3,methods=GET
-
-#         - id: inventory-service-swagger
-#           uri: http://localhost:8082
-#           predicates:
-#             - Path=/aggregate/inventory-service/api-docs
-#           filters:
-#             - CircuitBreaker=name=inventoryServiceSwaggerCircuitBreaker,fallbackUri=forward:/fallbackRoute
-#             - SetPath=/api-docs
-#             - AddResponseHeader=Content-Type, application/json
-
-#   security:
-#     oauth2:
-#       resourceserver:
-#         jwt:
-#           issuer-uri: http://localhost:8181/realms/ecommerce-realm
-
-# logging:
-#   level:
-#     org.springframework.cloud.gateway: DEBUG
-
-# # ===========================================================
-# # RESILIENCE4J CONFIGURATION
-# # ===========================================================
-# resilience4j:
-#   circuitbreaker:
-#     configs:
-#       default:
-#         registerHealthIndicator: true
-#         slidingWindowType: COUNT_BASED
-#         slidingWindowSize: 10
-#         minimumNumberOfCalls: 5
-#         failureRateThreshold: 50
-#         waitDurationInOpenState: 5s
-#         permittedNumberOfCallsInHalfOpenState: 3
-#         automaticTransitionFromOpenToHalfOpenEnabled: true
-
-#   timelimiter:
-#     configs:
-#       default:
-#         timeoutDuration: 3s
-
-#   retry:
-#     configs:
-#       default:
-#         maxAttempts: 3
-#         waitDuration: 2s
-
-# # ===========================================================
-# # SWAGGER AGGREGATION
-# # ===========================================================
-# springdoc:
-#   api-docs:
-#     enabled: true
-#     path: /api-docs
-
-#   swagger-ui:
-#     enabled: true
-#     path: /swagger-ui.html
-#     urls:
-#       - name: Product Service
-#         url: http://localhost:9000/aggregate/product-service/api-docs
-#       - name: Order Service
-#         url: http://localhost:9000/aggregate/order-service/api-docs
-#       - name: Inventory Service
-#         url: http://localhost:9000/aggregate/inventory-service/api-docs
-
-# # ===========================================================
-# server:
-#   port: 9000
-
-# spring:
-#   application:
-#     name: api-gateway
-
-#   cloud:
-#     gateway:
-#       mvc:
-#         routes:
-
-#           - id: product-service
-#             uri: http://localhost:8080
-#             predicates:
-#               - Path=/api/products/**
-
-#           # Swagger Proxy
-#           - id: product-service-swagger
-#             uri: http://localhost:8080
-#             predicates:
-#               - Path=/aggregate/product-service/api-docs
-#             filters:
-#               - SetPath=/api-docs
-#               - AddResponseHeader=Content-Type, application/json
-
-#           - id: order-service
-#             uri: http://localhost:8081
-#             predicates:
-#               - Path=/api/orders/**
-
-#           # Swagger Proxy
-#           - id: order-service-swagger
-#             uri: http://localhost:8081
-#             predicates:
-#               - Path=/aggregate/order-service/api-docs
-#             filters:
-#               - SetPath=/api-docs
-#               - AddResponseHeader=Content-Type, application/json
-
-#           - id: inventory-service
-#             uri: http://localhost:8082
-#             predicates:
-#               - Path=/api/inventory/**
-
-#           # Swagger Proxy
-#           - id: inventory-service-swagger
-#             uri: http://localhost:8082
-#             predicates:
-#               - Path=/aggregate/inventory-service/api-docs
-#             filters:
-#               - SetPath=/api-docs
-#               - AddResponseHeader=Content-Type, application/json
-
-#   security:
-#     oauth2:
-#       resourceserver:
-#         jwt:
-#           issuer-uri: http://localhost:8181/realms/ecommerce-realm
-
-# logging:
-#   level:
-#     org.springframework.cloud.gateway: DEBUG
-
-# # SPRINGDOC SWAGGER UI CONFIG
-# springdoc:
-#   api-docs:
-#     enabled: true
-#     path: /api-docs
-
-#   swagger-ui:
-#     enabled: true
-#     path: /swagger-ui.html
-
-#     urls:
-#       - name: Product Service
-#         url: /aggregate/product-service/api-docs
-
-#       - name: Order Service
-#         url: /aggregate/order-service/api-docs
-
-#       - name: Inventory Service
-#         url: /aggregate/inventory-service/api-docs
