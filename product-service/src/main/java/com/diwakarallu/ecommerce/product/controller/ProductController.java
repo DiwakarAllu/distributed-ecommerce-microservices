@@ -40,6 +40,12 @@ public class ProductController {
                 .stream()
                 .map(product -> ProductMapper.toResponse(product))
                 .collect(Collectors.toList());
+//        try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
         return ResponseEntity.ok(response);
     }
 
