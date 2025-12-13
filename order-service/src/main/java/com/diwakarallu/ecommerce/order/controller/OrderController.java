@@ -8,7 +8,7 @@ import com.diwakarallu.ecommerce.order.dto.OrderRequest;
 import com.diwakarallu.ecommerce.order.service.OrderService;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
